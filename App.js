@@ -1,10 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { Alert, StyleSheet, Text, Image, View } from "react-native";
+import { Alert, StyleSheet, Text, Image, View, FlatList, ActivityIndicator } from "react-native";
 import { getPhotos } from "./src/api/photos.api";
 import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 
-const Post = styled.View`
+const Cont = styled.View`
   flex: 1;
   background-color: #fff;
   align-items: center;
@@ -41,15 +41,31 @@ export default function App() {
     fetchPhotos();
   }, []);
 
+  if (isLoading) {
+    return (
+      <Cont>
+        <ActivityIndicator size="large" />
+        <Text>Loading...</Text>
+      </Cont>
+    );
+  }
+
   return (
-    <Post>
+    <Cont>
       <Text>Open up App.js to start working on your app!</Text>
-      {photos.map((obj) => (
+      <FlatList
+        data={photos}
+        renderItem={({ item }) => (
+          // <Text key={obj.id}>{obj.slug}</Text>
+          <PostImage source={{ uri: item.urls.raw }} />
+        )}
+      />
+      {/* {photos.map((obj) => (
         // <Text key={obj.id}>{obj.slug}</Text>
-        <PostImage source={{ uri: obj.urls.raw }} key={obj.id}/>
-      ))}
+        <PostImage source={{ uri: obj.urls.raw }} key={obj.id} />
+      ))} */}
       <StatusBar style="auto" />
-    </Post>
+    </Cont>
   );
 }
 
