@@ -15,6 +15,7 @@ const PostImage = styled.Image`
   width: 100px;
   height: 100px;
   border-radius: 10px;
+  margin-top: 5px;
 `;
 
 export default function App() {
@@ -30,7 +31,6 @@ export default function App() {
           Alert.alert("Error", "No photos");
           return;
         }
-        console.log("data", data);
         setPhotos(data);
       } catch (err) {
         Alert.alert("Error", "Something went wrong");
@@ -56,24 +56,10 @@ export default function App() {
       <FlatList
         data={photos}
         renderItem={({ item }) => (
-          // <Text key={obj.id}>{obj.slug}</Text>
           <PostImage source={{ uri: item.urls.raw }} />
         )}
       />
-      {/* {photos.map((obj) => (
-        // <Text key={obj.id}>{obj.slug}</Text>
-        <PostImage source={{ uri: obj.urls.raw }} key={obj.id} />
-      ))} */}
       <StatusBar style="auto" />
     </Cont>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
