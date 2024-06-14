@@ -1,5 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { Alert, StyleSheet, Text, Image, View, FlatList, ActivityIndicator } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  FlatList,
+  ActivityIndicator,
+  RefreshControl,
+} from "react-native";
 import { getPhotos } from "./src/api/photos.api";
 import { useEffect, useState } from "react";
 import styled from "styled-components/native";
@@ -22,22 +31,23 @@ export default function App() {
   const [photos, setPhotos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getPhotos();
-        if (!data.length) {
-          Alert.alert("Error", "No photos");
-          return;
-        }
-        setPhotos(data);
-      } catch (err) {
-        Alert.alert("Error", "Something went wrong");
-      } finally {
-        setIsLoading(false);
+  const fetchPhotos = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getPhotos();
+      if (!data.length) {
+        Alert.alert("Error", "No photos");
+        return;
       }
-    };
+      setPhotos(data);
+    } catch (err) {
+      Alert.alert("Error", "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchPhotos();
   }, []);
 
@@ -54,10 +64,11 @@ export default function App() {
     <Cont>
       <Text>Open up App.js to start working on your app!</Text>
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={fetchPhotos} />
+        }
         data={photos}
-        renderItem={({ item }) => (
-          <PostImage source={{ uri: item.urls.raw }} />
-        )}
+        renderItem={({ item }) => <PostImage source={{ uri: item.urls.raw }} />}
       />
       <StatusBar style="auto" />
     </Cont>
