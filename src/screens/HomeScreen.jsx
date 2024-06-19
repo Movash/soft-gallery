@@ -24,7 +24,7 @@ const PostImage = styled.Image`
   margin-top: 5px;
 `;
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
   const [photos, setPhotos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,7 +66,7 @@ export default function HomeScreen() {
         }
         data={photos}
         renderItem={({ item }) => (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("FullPhoto", {id: item.id, title: item.title})}>
             <PostImage source={{ uri: item.urls.raw }} />
           </TouchableOpacity>
         )}
